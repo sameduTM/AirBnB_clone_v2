@@ -2,10 +2,14 @@
 
 CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
 
-CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost' IDENTIFIED BY 'hbnb_dev_pwd';
+CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost' IDENTIFIED WITH mysql_native_password BY 'hbnb_dev_pwd';
 
-GRANT ALL PRIVILEGES ON hbnb_dev_db TO 'hbnb_dev'@'localhost' WITH GRANT OPTION;
+USE hbnb_dev_db;
 
-GRANT SELECT ON performance_schema TO 'hbnb'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON hbnb_dev_db TO 'hbnb_dev'@'localhost';
+
+USE performance_schema;
+
+GRANT SELECT ON performance_schema.* TO 'hbnb_dev'@'localhost';
 
 FLUSH PRIVILEGES;
