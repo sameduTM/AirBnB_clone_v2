@@ -132,9 +132,13 @@ class HBNBCommand(cmd.Cmd):
         elif line[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        dct = line[1].split('=')
         new_instance = HBNBCommand.classes[line[0]]()
-        setattr(new_instance, dct[0], dct[1].strip('"'))
+        for i in range(len(line)):
+            if line[i] in HBNBCommand.classes:
+                continue
+            else:
+                item = line[i].split('=')
+                setattr(new_instance, item[0], item[1].strip('"'))
         storage.save()
         print(new_instance.id)
 
