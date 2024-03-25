@@ -138,7 +138,8 @@ class HBNBCommand(cmd.Cmd):
                 continue
             else:
                 item = line[i].split('=')
-                setattr(new_instance, item[0], item[1].strip('"'))
+                setattr(new_instance, item[0], item[1].strip(
+                    '"').replace('_', ' '))
         storage.save()
         print(new_instance.id)
 
