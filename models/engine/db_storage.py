@@ -1,8 +1,12 @@
 #!/usr/bin/python3
 import os
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base, scoped_session
+from models.state import State
+from models.city import City
 """This is the db_storage module"""
+
+Base = declarative_base()
 
 
 class DBStorage:
@@ -34,3 +38,23 @@ class DBStorage:
             self.__session.query().all()
         else:
             self.__session.query(cls).all()
+
+    def new(self, obj):
+        """add the object to the current database session"""
+        self.__session.add(obj)
+
+    def save(self):
+        """commit all changes of the current database session"""
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """delete from the current database session"""
+        if obj is not None:
+            self.__session.delete(obj)
+
+    def reload(self):
+        """create all tables in the database (feature of SQLAlchemy)"""
+        Base.metadata.create_all(self.__engine)
+        session = sessionmaker(self.__engine, expire_on_commit=False)
+        Session = scoped_session(session)
+        Session()
