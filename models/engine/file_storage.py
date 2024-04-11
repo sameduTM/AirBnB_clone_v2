@@ -17,7 +17,6 @@ class FileStorage:
                 if cls_name == key.split('.')[0]:
                     filter_objects[key] = value
             return filter_objects
-        print(len(FileStorage.__objects))
         return FileStorage.__objects
 
     def new(self, obj):
