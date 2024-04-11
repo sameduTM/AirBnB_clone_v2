@@ -115,33 +115,21 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        line = args.split(' ')
-        """if not args:
+        ag = args.split(' ')
+        if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif ag[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)"""
-        # storage.save()
-        if not line[0]:
-            print("** class name missing **")
-            return
-        elif line[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[line[0]]()
-        for i in range(len(line)):
-            if line[i] in HBNBCommand.classes:
-                continue
-            else:
-                item = line[i].split('=')
-                setattr(new_instance, item[0], item[1].strip(
-                    '"').replace('_', ' '))
-        storage.save()
+        new_instance = HBNBCommand.classes[ag[0]]()
+        del ag[0]
+        for i in range(len(ag)):
+            k = ag[i].split('=')
+            setattr(new_instance, k[0], k[1].strip(
+                '"').replace('_', ' ').replace('"', '\\'))
         print(new_instance.id)
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -217,20 +205,21 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
+        # cls_name = getattr(sys.modules[__name__], args)
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all(args).items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all(args).items():
                 print_list.append(str(v))
 
-        print(print_list)
+        print('[%s]' % ','.join(print_list))
 
     def help_all(self):
         """ Help information for the all command """
@@ -281,7 +270,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # first determine if kwargs or args
-        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
+        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) == dict:
             kwargs = eval(args[2])
             args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
             for k, v in kwargs.items():
