@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """ Console Module """
 import cmd
 import sys
@@ -123,16 +123,25 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[ag[0]]()
-        del ag[0]
         for i in range(len(ag)):
-            k = ag[i].split('=')
-            setattr(new_instance, k[0], k[1].strip(
-                '"').replace('_', ' ').replace('"', '\\'))
+            if i == 0 or '=' not in ag[i]:
+                continue
+            kv = ag[i].split('=')
+            if kv[1].startswith('"'):
+                kv[1] = kv[1].replace(
+                    '_', ' ').strip('"').replace('"', '\\')
+            elif '.' in kv[1]:
+                kv[1] = float(kv[1])
+            else:
+                kv[1] = int(kv[1])
+            setattr(new_instance, kv[0], kv[1])
+
         print(new_instance.id)
+        storage.new(new_instance)
         storage.save()
 
     def help_create(self):
-        """ Help information for the create-method """
+        """ Help information for the create method """
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
 
@@ -205,21 +214,22 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-        # cls_name = getattr(sys.modules[__name__], args)
 
         if args:
+            objects = storage.all(args)
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all(args).items():
+            for k, v in objects.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage.all(args).items():
+            objects = storage.all()
+            for k, v in objects.items():
                 print_list.append(str(v))
 
-        print('[%s]' % ','.join(print_list))
+        print("[%s] " % ",".join(print_list))
 
     def help_all(self):
         """ Help information for the all command """
@@ -270,7 +280,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # first determine if kwargs or args
-        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) == dict:
+        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
             kwargs = eval(args[2])
             args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
             for k, v in kwargs.items():
