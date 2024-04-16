@@ -131,6 +131,7 @@ class HBNBCommand(cmd.Cmd):
                 kv[1] = kv[1].replace(
                     '_', ' ').strip('"').replace('"', '\\')
             elif '.' in kv[1]:
+                print(kv[1])
                 kv[1] = float(kv[1])
             else:
                 kv[1] = int(kv[1])
