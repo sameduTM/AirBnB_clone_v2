@@ -2,15 +2,22 @@
 # script that sets up your web servers for the deployment of web_static
 
 # install nginx
+sudo apt-get update
 sudo apt-get install nginx -y
 # create folders
-sudo mkdir -p /data/
-sudo mkdir -p /data/web_static/
 sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
-echo "Hello Holberton" | sudo tee /data/web_static/releases/test/index.html
+
+# create html file
+echo "<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>" | sudo tee /data/web_static/releases/test/index.html
 # symbolic link /data/web_static/current linked to /data/web_static/releases/test/
-sudo ln -s /data/web_static/releases/test /data/web_static/current
+sudo ln -sf /data/web_static/releases/test /data/web_static/current
 # Give ownership of the /data/ folder to the ubuntu user AND group
 sudo chown ubuntu:ubuntu -R /data/
 sudo chmod -R 755 /data/
@@ -46,4 +53,4 @@ echo "server {
 sudo nginx -t
 
 # restart nginx
-Sudo service nginx restart
+sudo service nginx restart
