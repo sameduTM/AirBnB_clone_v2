@@ -54,3 +54,6 @@ sudo nginx -t
 
 # restart nginx
 sudo service nginx restart
+
+# ensure script exits successfully
+exit 0
