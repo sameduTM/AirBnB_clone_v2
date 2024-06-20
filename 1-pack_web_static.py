@@ -8,4 +8,7 @@ from datetime import datetime
 def do_pack():
     x = datetime.now()
     local("mkdir -p versions")
-    local(f"tar -cvzf versions/web_static_{x.year}{x.month}{x.day}{x.hour}{x.minute}{x.second}.tgz web_static")
+    try:
+        local(f"tar -cvzf versions/web_static_{x.year}{x.month}{x.day}{x.hour}{x.minute}{x.second}.tgz web_static")
+    except Exception:
+        return None
