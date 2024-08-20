@@ -22,7 +22,6 @@ def do_deploy(archive_path):
         run(f'rm -rf /data/web_static/releases/{arc_pth}/web_static')
         run('rm -rf /data/web_static/current')
         run(f'ln -s /data/web_static/releases/{arc_pth}/ /data/web_static/current')
-
         return True
     else:
         return False
