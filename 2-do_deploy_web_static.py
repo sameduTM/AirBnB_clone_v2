@@ -16,7 +16,6 @@ def do_deploy(archive_path):
         arc_pth = archive_path.replace('versions/', '').replace('.tgz', '')
         put(archive_path, f'/tmp/{flname}')
         run(f'mkdir -p /data/web_static/releases/{arc_pth}/')
-        run('chmod 755 -R /data/')
         run(f'tar -xzf /tmp/{flname} -C /data/web_static/releases/{arc_pth}/')
         run(f'rm /tmp/{flname}')
         run(f'mv /data/web_static/releases/{arc_pth}/web_static/* /data/web_static/releases/{arc_pth}/')
