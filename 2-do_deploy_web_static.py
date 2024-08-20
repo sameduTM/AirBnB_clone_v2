@@ -17,12 +17,11 @@ def do_deploy(archive_path):
         run(f'mkdir -p /data/web_static/releases/{arc_pth}/')
         run(f'tar -xzf /tmp/{flname} -C /data/web_static/releases/{arc_pth}/')
         run(f'rm /tmp/{flname}')
-        run(f'mv /data/web_static/releases/{arc_pth}/web_static/*
-            /data/web_static/releases/{arc_pth}/')
+        run(f'mv /data/web_static/releases/{arc_pth}/web_static/* /data/web_static/releases/{arc_pth}/')
         run(f'rm -rf /data/web_static/releases/{arc_pth}/web_static')
         run('rm -rf /data/web_static/current')
-        run(f'ln -s /data/web_static/releases/{arc_pth}/
-            /data/web_static/current')
+        run(
+            f'ln -s /data/web_static/releases/{arc_pth}/ /data/web_static/current')
 
         return True
     else:
