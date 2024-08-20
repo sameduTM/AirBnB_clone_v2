@@ -3,6 +3,7 @@
 archive to your web servers, using the function do_deploy:
 """
 from fabric.api import put, run, env
+import os
 
 env.hosts = ['52.87.231.249', '54.157.147.24']
 
@@ -10,7 +11,7 @@ env.hosts = ['52.87.231.249', '54.157.147.24']
 def do_deploy(archive_path):
     """Distributes an archive to the web servers.
     """
-    if archive_path:
+    if os.path.exists(archive_path):
         put(archive_path, '/tmp/')
         flname = archive_path.replace('versions/', '')
         arc_pth = archive_path.replace('versions/', '').replace('.tgz', '')
@@ -20,8 +21,7 @@ def do_deploy(archive_path):
         run(f'mv /data/web_static/releases/{arc_pth}/web_static/* /data/web_static/releases/{arc_pth}/')
         run(f'rm -rf /data/web_static/releases/{arc_pth}/web_static')
         run('rm -rf /data/web_static/current')
-        run(
-            f'ln -s /data/web_static/releases/{arc_pth}/ /data/web_static/current')
+        run(f'ln -s /data/web_static/releases/{arc_pth}/ /data/web_static/current')
 
         return True
     else:
