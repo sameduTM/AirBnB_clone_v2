@@ -12,9 +12,9 @@ def do_deploy(archive_path):
     """Distributes an archive to the web servers.
     """
     if os.path.exists(archive_path):
-        put(archive_path, '/tmp/')
         flname = archive_path.replace('versions/', '')
         arc_pth = archive_path.replace('versions/', '').replace('.tgz', '')
+        put(archive_path, f'/tmp/{flname}')
         run(f'mkdir -p /data/web_static/releases/{arc_pth}/')
         run('chmod 755 -R /data/')
         run(f'tar -xzf /tmp/{flname} -C /data/web_static/releases/{arc_pth}/')
