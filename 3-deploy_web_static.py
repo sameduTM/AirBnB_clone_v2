@@ -7,4 +7,5 @@ do_pack = __import__("1-pack_web_static").do_pack()
 def deploy():
     """creates and distributes an archive to your web servers,
     """
-    archive_path = 
+    archive_path = do_pack
+    
