@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """DBStorage engine for sqlalchemy"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
