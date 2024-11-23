@@ -56,3 +56,7 @@ class FileStorage:
             obj_id = f"{obj.__class__.__name__}.{obj.id}"
             if obj_id in FileStorage.__objects:
                 del FileStorage.__objects[obj_id]
+
+    def close(self):
+        """public method to close"""
+        self.reload()

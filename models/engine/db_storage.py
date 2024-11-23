@@ -42,13 +42,16 @@ class DBStorage:
         all_objects = {}
         if cls is None:
             for cls_name in all_classes:
-                results = self.__session.query(cls_name).all()
+                results = self.__session.query(cls_name)
                 for row in results:
                     all_objects[f"{State.name}.{row.id}"] = row
         else:
-            results = self.__session.query(eval(cls)).all()
-            for row in results:
-                all_objects[f"{cls}.{row.id}"] = row
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                all_objects[key] = elem
 
         return all_objects
 
@@ -72,3 +75,7 @@ class DBStorage:
         session = sessionmaker(self.__engine, expire_on_commit=False)
         Session = scoped_session(session)
         self.__session = Session()
+
+    def close(self):
+        """Public method to close"""
+        self.__session.close()
